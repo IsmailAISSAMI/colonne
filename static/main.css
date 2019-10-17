@@ -1,0 +1,55 @@
+body, html {
+  font-family: Helvetica;
+  margin: 0;
+  margin-top : 0;
+  height: 100%;
+}
+
+a { 
+  text-decoration: none;
+  color: inherit;
+}
+
+#header {
+  margin: 0;
+  height : 70px;
+  background-color: black;
+  width: 100%;
+  color: white;
+  padding: 0.5%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /*fixed-top*/
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+#project_title {
+  float: left;
+  height:40px;
+  width:70%;
+  padding-left:10px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+#register_link{
+  float: right;
+  width:20%;
+  text-align: center;
+  white-space: nowrap;
+  font-weight: bold;
+  font-size: 30px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+#main_body{
+  margin-top: 100px;
+}
+
+

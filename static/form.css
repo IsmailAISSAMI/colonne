@@ -1,0 +1,105 @@
+.register-form {
+  display: flex;
+  flex-direction: column;
+  border: 1px grey solid;
+  border-radius: 20px;
+  padding: 20px;
+  min-width: 350px;
+  margin: 5px;
+}
+input[type=text], input[type=email], input[type=password] {
+  display: flex;
+  padding: 10px;
+  border-radius: 10px;
+  border: #ffa7a7 solid 1px;
+}
+
+input[type=text]:focus, input[type=email]:focus, input[type=password]:focus {
+  border-color: red;
+}
+.register-form > * {
+  margin: 20px 0;
+}
+
+.register-form input[type=submit] {
+  background-color: #ffa7a7;
+  border: 0px;
+  border-radius: 20px;
+  padding: 20px;
+  font-size:200%;
+  color: red;
+}
+
+.register-form input[type=submit]:disabled {
+  background-color: #aaa;
+  border: 0px;
+  border-radius: 20px;
+  padding: 20px;
+  font-size:200%;
+  color: white;
+} 
+
+.status {
+  font-size: 80%;
+}
+
+.status.error {
+  color : red; 
+}
+
+.status.warning {
+  color : orange;
+}
+
+
+/*  CSS pour login form*/
+.login_form{
+  width:300px;
+  padding:40px;
+  position: absolute;
+  top:70%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  border: 1px solid black;
+  border-radius:20px;  
+}
+
+.login_form h2{
+  margin-top: 0px;
+  margin-bottom:15px;
+  text-align: center;
+}
+
+.login_form input[type=email], input[type=password]{
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid black;
+  padding: 15px 10px;
+  width:200px;
+  outline: none;
+  border-radius:20px;
+  transition: 0.25s; 
+} 
+
+.login_form input[type=email]:focus, input[type=password]:focus{
+  width:280px;
+  border-color:#2ecc71;
+}
+
+.login_form input[type=submit]{
+  background:none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid #2ecc71;
+  padding: 15px 40px;
+  outline: none;
+  border-radius:20px;
+  transition: 0.25s;
+  cursor: pointer;
+}
+
+.login_form input[type=submit]:hover{
+  background:#2ecc71;
+}  

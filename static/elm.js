@@ -10599,9 +10599,35 @@ var author$project$Register$main = elm$browser$Browser$element(
 		update: author$project$Register$update,
 		view: author$project$Register$view
 	});
-var author$project$Main$initialModel = {newPost: '', posts: _List_Nil, users: _List_Nil};
+var author$project$Main$initialModel = {colonnes: _List_Nil, newPost: '', posts: _List_Nil, users: _List_Nil};
+var author$project$Main$colonnelistPort = _Platform_incomingPort('colonnelistPort', elm$json$Json$Decode$value);
 var author$project$Main$DecodeError = function (a) {
 	return {$: 'DecodeError', a: a};
+};
+var author$project$Main$GotColonnes = function (a) {
+	return {$: 'GotColonnes', a: a};
+};
+var author$project$Main$Colonne = F2(
+	function (name, date) {
+		return {date: date, name: name};
+	});
+var author$project$Main$colonneDecoder = A3(
+	elm$json$Json$Decode$map2,
+	author$project$Main$Colonne,
+	A2(elm$json$Json$Decode$field, 'name', elm$json$Json$Decode$string),
+	A2(elm$json$Json$Decode$field, 'date', elm$json$Json$Decode$string));
+var author$project$Main$decodeExternalColonnelist = function (val) {
+	var _n0 = A2(
+		elm$json$Json$Decode$decodeValue,
+		elm$json$Json$Decode$list(author$project$Main$colonneDecoder),
+		val);
+	if (_n0.$ === 'Ok') {
+		var colonnelist = _n0.a;
+		return author$project$Main$GotColonnes(colonnelist);
+	} else {
+		var err = _n0.a;
+		return author$project$Main$DecodeError(err);
+	}
 };
 var author$project$Main$GotPosts = function (a) {
 	return {$: 'GotPosts', a: a};
@@ -10682,7 +10708,8 @@ var author$project$Main$subscriptions = function (model) {
 		_List_fromArray(
 			[
 				author$project$Main$userlistPort(author$project$Main$decodeExternalUserlist),
-				author$project$Main$postlistPort(author$project$Main$decodeExternalPostlist)
+				author$project$Main$postlistPort(author$project$Main$decodeExternalPostlist),
+				author$project$Main$colonnelistPort(author$project$Main$decodeExternalColonnelist)
 			]));
 };
 var author$project$Main$NoOp = {$: 'NoOp'};
@@ -10723,6 +10750,13 @@ var author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{users: users}),
+					elm$core$Platform$Cmd$none);
+			case 'GotColonnes':
+				var colonnes = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{colonnes: colonnes}),
 					elm$core$Platform$Cmd$none);
 			case 'GotPosts':
 				var posts = msg.a;
@@ -10941,6 +10975,51 @@ var author$project$Main$view = function (model) {
 								elm$html$Html$Attributes$id('post-list')
 							]),
 						A2(elm$core$List$map, author$project$Main$viewPost, model.posts))
+					])),
+				A2(
+				elm$html$Html$section,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$id('colonnes')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$form,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$action('/add-column'),
+								elm$html$Html$Attributes$class('colonne-form'),
+								elm$html$Html$Attributes$method('POST')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								elm$html$Html$label,
+								_List_Nil,
+								_List_fromArray(
+									[
+										elm$html$Html$text('Name: '),
+										A2(
+										elm$html$Html$input,
+										_List_fromArray(
+											[
+												elm$html$Html$Attributes$name('name'),
+												elm$html$Html$Attributes$type_('text')
+											]),
+										_List_Nil)
+									])),
+								A2(
+								elm$html$Html$input,
+								_List_fromArray(
+									[
+										elm$html$Html$Attributes$name(''),
+										elm$html$Html$Attributes$type_('submit'),
+										elm$html$Html$Attributes$value('+Colonne')
+									]),
+								_List_Nil),
+								elm$html$Html$text('  ')
+							]))
 					]))
 			]));
 };
@@ -10954,5 +11033,5 @@ var author$project$Main$main = elm$browser$Browser$element(
 		view: author$project$Main$view
 	});
 _Platform_export({'Main':{'init':author$project$Main$main(
-	elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.0"},"types":{"message":"Main.Msg","aliases":{"Main.Post":{"args":[],"type":"{ authorName : String.String, content : String.String, date : String.String }"},"Main.User":{"args":[],"type":"{ first_name : String.String, last_name : String.String, status : Main.UserStatus, rowid : Basics.Int }"},"Json.Decode.Value":{"args":[],"type":"Json.Encode.Value"}},"unions":{"Main.Msg":{"args":[],"tags":{"GotUserlist":["List.List Main.User"],"GotPosts":["List.List Main.Post"],"DecodeError":["Json.Decode.Error"],"PostUpdated":["String.String"],"PostSubmitted":[],"NoOp":[]}},"Main.UserStatus":{"args":[],"tags":{"Disconnected":[],"Available":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"String.String":{"args":[],"tags":{"String":[]}},"Json.Decode.Error":{"args":[],"tags":{"Field":["String.String","Json.Decode.Error"],"Index":["Basics.Int","Json.Decode.Error"],"OneOf":["List.List Json.Decode.Error"],"Failure":["String.String","Json.Decode.Value"]}},"Json.Encode.Value":{"args":[],"tags":{"Value":[]}}}}})},'Register':{'init':author$project$Register$main(
+	elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.0"},"types":{"message":"Main.Msg","aliases":{"Main.Colonne":{"args":[],"type":"{ name : String.String, date : String.String }"},"Main.Post":{"args":[],"type":"{ authorName : String.String, content : String.String, date : String.String }"},"Main.User":{"args":[],"type":"{ first_name : String.String, last_name : String.String, status : Main.UserStatus, rowid : Basics.Int }"},"Json.Decode.Value":{"args":[],"type":"Json.Encode.Value"}},"unions":{"Main.Msg":{"args":[],"tags":{"GotUserlist":["List.List Main.User"],"GotColonnes":["List.List Main.Colonne"],"GotPosts":["List.List Main.Post"],"DecodeError":["Json.Decode.Error"],"PostUpdated":["String.String"],"PostSubmitted":[],"NoOp":[]}},"Main.UserStatus":{"args":[],"tags":{"Disconnected":[],"Available":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"String.String":{"args":[],"tags":{"String":[]}},"Json.Decode.Error":{"args":[],"tags":{"Field":["String.String","Json.Decode.Error"],"Index":["Basics.Int","Json.Decode.Error"],"OneOf":["List.List Json.Decode.Error"],"Failure":["String.String","Json.Decode.Value"]}},"Json.Encode.Value":{"args":[],"tags":{"Value":[]}}}}})},'Register':{'init':author$project$Register$main(
 	elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.0"},"types":{"message":"Register.Msg","aliases":{"Register.TestEmail":{"args":[],"type":"{ email : String.String, free : Basics.Bool }"}},"unions":{"Register.Msg":{"args":[],"tags":{"EmailUpdated":["String.String"],"FirstNameUpdated":["String.String"],"LastNameUpdated":["String.String"],"Password1Updated":["String.String"],"Password2Updated":["String.String"],"GotTestEmail":["Result.Result Http.Error Register.TestEmail"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}}}}})}});}(this));

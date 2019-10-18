@@ -18,7 +18,7 @@ port colonnelistPort : (Value -> msg) -> Sub msg
 
 
 type alias Model =
-    { colonnes : list Colonne
+    { colonnes : List Colonne
     , posts : List Post
     , users : List User
     , newPost : String
@@ -32,7 +32,7 @@ type alias Post =
     }
 
 type alias Colonne =
-    { utile : String
+    { name : String
     , date : String
     }
 
@@ -51,6 +51,7 @@ type UserStatus
 
 type Msg
     = GotUserlist (List User)
+    | GotColonnes (List Colonne)
     | GotPosts (List Post)
     | DecodeError Decode.Error
     | PostUpdated String
@@ -91,6 +92,12 @@ postDecoder =
         (Decode.field "content" Decode.string)
         (Decode.field "date" Decode.string)
 
+colonneDecoder : Decoder Colonne
+colonneDecoder =
+    Decode.map2 Colonne
+        (Decode.field "name" Decode.string)
+        (Decode.field "date" Decode.string)
+
 
 decodeExternalUserlist : Value -> Msg
 decodeExternalUserlist val =
@@ -109,12 +116,22 @@ decodeExternalPostlist val =
 
         Err err ->
             DecodeError err
+            
+decodeExternalColonnelist : Value -> Msg
+decodeExternalColonnelist val =
+    case Decode.decodeValue (Decode.list colonneDecoder) val of
+        Ok colonnelist ->
+            GotColonnes colonnelist
+
+        Err err ->
+            DecodeError err
 
 
 initialModel : Model
 initialModel =
     { posts = []
     , users = []
+    , colonnes=[]
     , newPost = ""
     }
 
@@ -124,6 +141,9 @@ update msg model =
     case msg of
         GotUserlist users ->
             ( { model | users = users }, Cmd.none )
+        
+        GotColonnes colonnes ->
+            ({ model | colonnes = colonnes }, Cmd.none)
 
         GotPosts posts ->
             ( { model | posts = posts }, Cmd.none )
@@ -179,6 +199,18 @@ view model =
             , ul [ id "post-list" ]
                 (List.map viewPost model.posts)
             ]
+        , section [ id "colonnes" ]
+          [ Html.form [ action "/add-column", class "colonne-form", method "POST" ]
+              [ label []
+                [ text "Name: "
+                , input [ name "name", type_ "text" ]
+                []
+                ]
+                , input [ name "", type_ "submit", value "+Colonne" ]
+                []
+                , text "  "
+              ]
+          ]
         ]
 
 
@@ -212,8 +244,9 @@ viewUser user =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ userlistPort decodeExternalUserlist,
-        postlistPort decodeExternalPostlist ]
+        [ userlistPort decodeExternalUserlist
+        , postlistPort decodeExternalPostlist 
+        , colonnelistPort decodeExternalColonnelist]
 
 
 main : Program () Model Msg

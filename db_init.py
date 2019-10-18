@@ -1,6 +1,8 @@
 import sqlite3
 
 from models.user import User
+from models.colonne import Colonne
+
 
 def make_dicts(cursor, row):
     return dict((cursor.description[idx][0], value)
@@ -13,16 +15,22 @@ db.row_factory = make_dicts
 cur = db.cursor()
 
 User.create_table(cur)
-
+Colonne.create_table(cur)
 
 users = [
     User("Ford","zda", "ford@betelgeuse.star", "12345"),
     User("Arthur","firero", "arthur@earth.planet", "12345"),
+    User("ismail","Aissami", "a@a.a", "12345")
+]
+
+colonnes=[
+  Colonne("colonne1","1")
 ]
 
 for user in users:
     user.insert(cur)
 
+colonnes.insert(cur)    
 
 db.commit()
 
@@ -33,4 +41,7 @@ for user in users:
     # uses the magic __repr__ method
     print("\t", user)
     
+for colonne in colonnes:
+    # uses the magic __repr__ method
+    print("\t", colonne)
 print()

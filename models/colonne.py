@@ -4,21 +4,21 @@ import datetime
        1- class colonne
 '''
 class Colonne:
-    def __init__(self, utile, rowid):
-        self.utile = utile
-        self.rowid = rowid
+    def __init__(self, name, idTable):
+        self.name = name
+        self.idTable = idTable
         self.timestamp = datetime.datetime.now().timestamp()
 
     def insert(self, cursor):
         cursor.execute('''
           INSERT INTO colonnes 
-          ( utile
-          , rowid
+          ( name
+          , idTable
           , timestamp
           )
           VALUES 
           ( ?, ?, ?)
-        ''', (self.utile, self.rowid, self.timestamp)
+        ''', (self.name, self.idTable, self.timestamp)
         )
     
     """    
@@ -36,10 +36,10 @@ class Colonne:
 
         cursor.execute('''
         CREATE TABLE colonnes
-        ( rowid TEXT NOT NULL
-        , utile TEXT
+        ( idTable TEXT NOT NULL
+        , name TEXT
         , timestamp DOUBLE
-        , FOREIGN KEY (rowid) REFERENCES users(email)
+        , FOREIGN KEY (idTable) REFERENCES users(email)
         )''')
 
         
@@ -51,13 +51,13 @@ class Colonne:
 class ColonneForDisplay:
     '''pour les var du constructeur verifie type alias colonne en main.elm'''
     def __init__(self, row):
-        self.utile = row['utile']      
+        self.name = row['name']      
         self.date = datetime.datetime.fromtimestamp(row['timestamp'])
    
     @classmethod
     def getAll(cls, cursor):
       cursor.execute('''
-          SELECT  utile, timestamp 
+          SELECT  name, timestamp 
           FROM colonnes
           ORDER BY timestamp DESC
       ''')

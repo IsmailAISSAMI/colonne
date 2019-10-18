@@ -22,6 +22,11 @@ socket.on('userlist', function(userlist){
   app.ports.userlistPort.send(userlist);
 });
 
+socket.on('colonnelist', function(colonnelist){
+  console.log("colonnelist received:", colonnelist);
+  app.ports.colonnelistPort.send(colonnelist);
+}); 
+  
 socket.on('postlist', function(postlist){
   console.log("postlist received:", postlist);
   app.ports.postlistPort.send(postlist);

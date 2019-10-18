@@ -48,7 +48,7 @@ def close_connection(exception):
         db.close()
         
 ##############################################################################
-#                APPLICATION CODE (read from this point!)                    #
+#                              APPLICATION CODE                              #
 ##############################################################################
 
 @app.route("/")
@@ -153,7 +153,6 @@ def posts_post():
 
     return "ok", 201
 
-##------------------------------------------------------------------
 ## Rowid -> User
 CONNECTED_USERS = {}
 
@@ -173,6 +172,16 @@ def broadcast_user_list(cursor):
         for u in UserForLogin.getAll(cursor)
       ]
   , broadcast=True)
+    
+def broadcast_colonne_list(cursor):
+    io.emit('colonnelist', [
+        { "name": colonne.name,
+          "date": colonne.date.strftime("%m/%d/%Y, %H:%M:%S"),
+        }
+        for colonne in ColonneForDisplay.getAll(cursor)
+      ]
+  , broadcast=True)
+
     
 @io.on('connect')
 def ws_connect():

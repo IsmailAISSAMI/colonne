@@ -206,23 +206,13 @@ view model =
                 , input [ name "name", type_ "text" ]
                 []
                 ]
-                , input [ name "", type_ "submit", value "+Colonne" ]
+                , input [ name "", type_ "submit", value "+C+" ]
                 []
                 , text "  "
               ]
+              , ul [ id "colonne-list" ]
+              (List.map viewColonne model.colonnes)
           ]
-        ]
-
-
-viewPost : Post -> Html Msg
-viewPost post =
-    li [ class "post" ]
-        [ div [ class "post-header" ]
-            [ span [ class "post-author" ]
-                [ text post.authorName ]
-            , span [ class "post-date" ] [ text <| "at " ++ post.date ]
-            ]
-        , div [ class "post-content" ] [ text post.content ]
         ]
 
 
@@ -239,6 +229,28 @@ viewUser user =
             )
                 ++ user.last_name
         ]
+
+viewPost : Post -> Html Msg
+viewPost post =
+    li [ class "post" ]
+        [ div [ class "post-header" ]
+            [ span [ class "post-author" ]
+                [ text post.authorName ]
+            , span [ class "post-date" ] [ text <| "at " ++ post.date ]
+            ]
+        , div [ class "post-content" ] [ text post.content ]
+        ]
+
+viewColonne : Colonne -> Html Msg
+viewColonne colonne =
+    li [ class "colonne" ]
+        [ div [ class "colonne-header" ]
+            [ span [ class "colonne-name" ]
+                [ text colonne.name ]
+            , span [ class "colonne-date" ] [ text <| "at " ++ colonne.date ]
+            ]
+        ]
+        
 
 
 subscriptions : Model -> Sub Msg

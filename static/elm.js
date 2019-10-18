@@ -10805,6 +10805,46 @@ var author$project$Main$PostSubmitted = {$: 'PostSubmitted'};
 var author$project$Main$PostUpdated = function (a) {
 	return {$: 'PostUpdated', a: a};
 };
+var author$project$Main$viewColonne = function (colonne) {
+	return A2(
+		elm$html$Html$li,
+		_List_fromArray(
+			[
+				elm$html$Html$Attributes$class('colonne')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				elm$html$Html$div,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$class('colonne-header')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$span,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$class('colonne-name')
+							]),
+						_List_fromArray(
+							[
+								elm$html$Html$text(colonne.name)
+							])),
+						A2(
+						elm$html$Html$span,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$class('colonne-date')
+							]),
+						_List_fromArray(
+							[
+								elm$html$Html$text('at ' + colonne.date)
+							]))
+					]))
+			]));
+};
 var author$project$Main$viewPost = function (post) {
 	return A2(
 		elm$html$Html$li,
@@ -11015,11 +11055,18 @@ var author$project$Main$view = function (model) {
 									[
 										elm$html$Html$Attributes$name(''),
 										elm$html$Html$Attributes$type_('submit'),
-										elm$html$Html$Attributes$value('+Colonne')
+										elm$html$Html$Attributes$value('+C+')
 									]),
 								_List_Nil),
 								elm$html$Html$text('  ')
-							]))
+							])),
+						A2(
+						elm$html$Html$ul,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$id('colonne-list')
+							]),
+						A2(elm$core$List$map, author$project$Main$viewColonne, model.colonnes))
 					]))
 			]));
 };

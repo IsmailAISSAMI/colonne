@@ -13,6 +13,8 @@ db = sqlite3.connect('.data/db.sqlite')
 db.row_factory = make_dicts
 
 cur = db.cursor()
+cur2 = db.cursor()
+
 
 User.create_table(cur)
 Colonne.create_table(cur)
@@ -24,13 +26,15 @@ users = [
 ]
 
 colonnes=[
-  Colonne("colonne1","1")
+    Colonne("colonne1","1"),
+    Colonne("colonne2","2")
 ]
 
 for user in users:
     user.insert(cur)
 
-colonnes.insert(cur)    
+for colonne in colonnes:
+  colonne.insert(cur)    
 
 db.commit()
 
@@ -41,6 +45,8 @@ for user in users:
     # uses the magic __repr__ method
     print("\t", user)
     
+print("The following columns has been inserted into the DB")
+
 for colonne in colonnes:
     # uses the magic __repr__ method
     print("\t", colonne)

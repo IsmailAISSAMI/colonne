@@ -21,14 +21,14 @@ class Colonne:
         ''', (self.name, self.idTable, self.timestamp)
         )
     
-    """    
+        
     def __repr__(self):
-        return "[Post by %s at %s: %s]"%(
-            self.author_id, 
-            str(datetime.datetime.fromtimestamp(self.timestamp)),
-            self.content[:50]
+        return "[columns < %s > created in table #%s at %s]"%(
+            self.name,
+            self.idTable,
+            str(datetime.datetime.fromtimestamp(self.timestamp))
         )
-    """
+    
     
     @classmethod
     def create_table(cls, cursor):
@@ -36,8 +36,8 @@ class Colonne:
 
         cursor.execute('''
         CREATE TABLE colonnes
-        ( idTable TEXT NOT NULL
-        , name TEXT
+        ( name TEXT
+        , idTable TEXT NOT NULL
         , timestamp DOUBLE
         , FOREIGN KEY (idTable) REFERENCES users(email)
         )''')
